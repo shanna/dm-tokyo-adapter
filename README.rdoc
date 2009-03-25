@@ -1,0 +1,7 @@
+= dm-tokyo-cabinet-adapter
+
+Description goes here.
+
+== Copyright
+
+Copyright (c) 2009 "Shane Hanna". See LICENSE for details.
