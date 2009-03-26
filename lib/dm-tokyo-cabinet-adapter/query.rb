@@ -28,8 +28,8 @@ module DataMapper
             )
           end
 
-          setlimit query.limit.to_i if query.limit
-          setorder(*tc_order(query))
+          setlimit(query.limit.to_i) if query.limit
+          setorder(*tc_order(query)) if query.order.size > 0
         end
 
         def search
@@ -44,13 +44,12 @@ module DataMapper
             primitive = property.primitive
             case operator
               when :eql  then primitive == Integer ? QCNUMEQ : QCSTREQ
-              when :like then QCSTRINC
+              when :like then QCSTRRX
               when :in   then QCSTRINC
               when :gt   then QCNUMGT
               when :lt   then QCNUMLT
               when :gte  then QCNUMGTE
               when :lte  then QCNUMLTE
-              when :raw  then QCSTRRX
               else raise NotImplementedError.new("TokyoCabinet: Query does not suppor the #{operator} operator")
             end
           end
@@ -64,10 +63,10 @@ module DataMapper
             order     = query.order.first
             field     = order.property.field(query.repository.name)
 
-            # TODO: Number constants if the types primitive is a number type.
+            primitive = order.property.primitive
             direction = case order.direction
-              when :asc  then ::TokyoCabinet::TDBQRY::QOSTRASC
-              when :desc then ::TokyoCabinet::TDBQRY::QOSTRDESC
+              when :asc  then primitive == Integer ? QONUMASC  : QOSTRASC
+              when :desc then primitive == Integer ? QONUMDESC : QOSTRDESC
             end
             [field, direction]
           end
