@@ -6,7 +6,9 @@
 
 A DataMapper Tokyo Cabinet table store adapter.
 
-=== "Table Store"[http://tokyocabinet.sourceforge.net/spex-en.html#features_tctdb]
+=== Table Store
+
+http://tokyocabinet.sourceforge.net/spex-en.html#features_tctdb
 
 The Tokyo Cabinet table storage engine doesn't require a predefined schema and as such properties in your resource are
 only used for by the adapter for typecasting. There is no need to migrate your resource when you create, update or
@@ -22,35 +24,35 @@ Ruby::
 
 * Via gem:
 
-  gem install shanna-dm-tokyo-cabinet-adapter -s http://gems.github.com
+    gem install shanna-dm-tokyo-cabinet-adapter -s http://gems.github.com
 
 * Via git:
 
-  git clone git://github.com/shanna/dm-tokyo-cabinet-adapter.git
-  rake install
+    git clone git://github.com/shanna/dm-tokyo-cabinet-adapter.git
+    rake install
 
 == Synopsis
 
-# Tokyo Cabinet DB files will be located in #{path}/#{database}/#{resource}.tdb
-DataMapper.setup(:default,
-  :adapter  => 'tokyo_cabinet',
-  :database => 'tc',
-  :path     => File.dirname(__FILE__)
-)
+  # Tokyo Cabinet DB files will be located in #{path}/#{database}/#{resource}.tdb
+  DataMapper.setup(:default,
+    :adapter  => 'tokyo_cabinet',
+    :database => 'tc',
+    :path     => File.dirname(__FILE__)
+  )
 
-# Define your DataMapper resource and start saving:
-class User
-  include DataMapper::Resource
-  property :id, Serial
-  property :name, String
-  property :age, Integer
-end
+  # Define your DataMapper resource and start saving:
+  class User
+    include DataMapper::Resource
+    property :id, Serial
+    property :name, String
+    property :age, Integer
+  end
 
-# No need to (auto_)migrate!
-User.create(:name => 'Fred', :age => '25')
+  # No need to (auto_)migrate!
+  User.create(:name => 'Fred', :age => '25')
 
-# Conditions:
-users = User.all(:age.gte => 10, :limit => 20, :order => [:age.asc])
+  # Conditions:
+  users = User.all(:age.gte => 10, :limit => 20, :order => [:age.asc])
 
 == TODO
 
