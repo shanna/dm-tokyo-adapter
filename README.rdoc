@@ -1,6 +1,80 @@
-= dm-tokyo-cabinet-adapter
+= DataMapper Tokyo Cabinet Adapter
 
-Description goes here.
+* http://github.com/shanna/dm-tokyo-cabinet-adapter/tree/master
+
+== Description
+
+A DataMapper Tokyo Cabinet table store adapter.
+
+=== "Table Store"[http://tokyocabinet.sourceforge.net/spex-en.html#features_tctdb]
+
+The Tokyo Cabinet table storage engine doesn't require a predefined schema and as such properties in your resource are
+only used for by the adapter for typecasting. There is no need to migrate your resource when you create, update or
+delete properties.
+
+== Dependencies
+
+Ruby::
+* dm-core      ~> 0.9
+* tokyocabinet ~> 1.21
+
+== Install
+
+* Via gem:
+
+  gem install shanna-dm-tokyo-cabinet-adapter -s http://gems.github.com
+
+* Via git:
+
+  git clone git://github.com/shanna/dm-tokyo-cabinet-adapter.git
+  rake install
+
+== Synopsis
+
+# Tokyo Cabinet DB files will be located in #{path}/#{database}/#{resource}.tdb
+DataMapper.setup(:default,
+  :adapter  => 'tokyo_cabinet',
+  :database => 'tc',
+  :path     => File.dirname(__FILE__)
+)
+
+# Define your DataMapper resource and start saving:
+class User
+  include DataMapper::Resource
+  property :id, Serial
+  property :name, String
+  property :age, Integer
+end
+
+# No need to (auto_)migrate!
+User.create(:name => 'Fred', :age => '25')
+
+# Conditions:
+users = User.all(:age.gte => 10, :limit => 20, :order => [:age.asc])
+
+== TODO
+
+* Documentation. It's undocumented at the moment.
+* Give access to the <tt>TokyoCabinet::TDB</tt> object through the adapter. Handy if you want to add indexes and other
+  things that can't be done through the DataMapper API.
+* Better tests. I haven't really tested all the DM primitives and query operators yet.
+* Better typecasting. DataTime and Time should typecast to Integer so that they can be searched using the numeric
+  operators.
+
+Yes I realize there is already another dm-tokyo-cabinet-adapter on github. I chose to occupy the most obvious name also
+as this table store is arguably better suited than the existing b-tree adapter to DataMappers relational database
+centric API.
+
+That said ideally in the future I'd like to contribute to these broader goals:
+
+* All the TokyoCabinet table stores equally supported in DM.
+* DataMapper define a public/semipublic API for key => value and search stores through Moneta (memcachedb, memcacheq,
+  couchdb, mtokyo cabinet bdb, etc.)
+* DataMapper per adapter query operators. You can't always shoehorn everything into an SQL mindset.
+
+== Contributing
+
+Go nuts. Just send me a pull request (github or otherwise) when you are happy with your code.
 
 == Copyright
 
