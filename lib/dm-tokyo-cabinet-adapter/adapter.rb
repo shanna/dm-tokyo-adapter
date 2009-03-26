@@ -75,7 +75,7 @@ module DataMapper
             # TODO: Mode option.
             tdb  = ::TokyoCabinet::TDB.new
             mode = ::TokyoCabinet::TDB::OWRITER | ::TokyoCabinet::TDB::OCREAT
-            if tdb.open(@path / model.storage_name + '.tdb', mode)
+            if tdb.open(@path / model.storage_name(name) + '.tdb', mode)
               begin
                 return yield(tdb)
               ensure
