@@ -1,6 +1,8 @@
 module DataMapper
   module Adapters
     module TokyoCabinet
+      #--
+      # TODO: Lots of duplicate code to be golfed out.
       class Adapter < AbstractAdapter
         require 'fileutils'
 
@@ -22,6 +24,28 @@ module DataMapper
                 accumulator
               end
 
+              values = resource.model.key(name).map{|property| property.get!(resource).to_s}
+              connection.put(
+                (values.size > 1 ? Digest::SHA1.hexdigest(values.join(':')) : values.first),
+                store
+              ) || nil
+            end
+          end.compact.size
+        end
+
+        def update(attributes, query)
+          read_many(query).map do |resource|
+            attributes.each do |property, value|
+              property.set!(resource, value)
+            end
+
+            # TODO: I'm kinda making this up as I go, pretty sure get! isn't what I want here.
+            store = resource.model.properties.inject({}) do |accumulator, property|
+              accumulator[property.field(name)] = property.get!(resource).to_s
+              accumulator
+            end
+
+            with_connection(resource.model) do |connection|
               values = resource.model.key(name).map{|property| property.get!(resource).to_s}
               connection.put(
                 (values.size > 1 ? Digest::SHA1.hexdigest(values.join(':')) : values.first),

@@ -39,6 +39,12 @@ class AdapterTest < Test::Unit::TestCase
       assert @user.destroy
       assert_equal 0, User.all.size
     end
+
+    should 'update item' do
+      @user.name = 'Woot'
+      assert @user.save
+      assert_equal 'Woot', User.get(@user.id).name
+    end
   end
 
   context 'Compound key resource' do
