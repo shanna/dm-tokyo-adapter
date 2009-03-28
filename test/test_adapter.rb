@@ -1,7 +1,7 @@
 require File.join(File.dirname(__FILE__), 'helper')
 
 class AdapterTest < Test::Unit::TestCase
-  context 'Resource' do
+  context 'Serial key resource' do
     setup do
       class ::User
         include DataMapper::Resource
@@ -38,6 +38,30 @@ class AdapterTest < Test::Unit::TestCase
     should 'destroy item' do
       assert @user.destroy
       assert_equal 0, User.all.size
+    end
+  end
+
+  context 'Compound key resource' do
+    setup do
+      class ::User
+        include DataMapper::Resource
+        property :name, String, :key => true
+        property :age, Integer, :key => true
+      end
+
+      @user = User.create(:name => 'Joe', :age => 22)
+    end
+
+    teardown do
+      # Why doesn't DM::Resource#destroy exist?
+      repository = DataMapper.repository(:default)
+      repository.adapter.delete(
+        DataMapper::Query.new(repository, ::User, {})
+      )
+    end
+
+    should 'get an item' do
+      assert_equal @user, User.get(*@user.key)
     end
   end
 end

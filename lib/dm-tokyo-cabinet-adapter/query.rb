@@ -13,23 +13,21 @@ module DataMapper
           @connection = connection
           super connection
 
-          # TODO: Composite keys.
-          if query.conditions.size == 1 && key = query.conditions.find{|op, prop, val| prop.serial?}
-            @get = key[2]
-            return
-          end
+          # All this mess to figure out if the query conditions hold a primary key search with no other conditions.
+          keys = query.model.key(query.repository.name).map do |key|
+            query.conditions.find{|c| c[0] == :eql && c[1] == key}
+          end.compact
 
-          query.conditions.each do |operator, property, value|
-            field = property.field(query.repository.name) unless operator == :raw
-            addcond(
-              field,
-              tc_operator(operator, property, value),
-              tc_value(operator, property, value)
-            )
+          if keys.size > 0 && keys.size == query.conditions.size
+            values = keys.map{|c| tc_value(query, *c)}
+            @get = keys.size > 1 ? Digest::SHA1.hexdigest(values.join(':')) : values.first
+          else
+            query.conditions.each do |c|
+              addcond(tc_field(query, *c), tc_operator(query, *c), tc_value(query, *c))
+            end
+            setlimit(query.limit.to_i) if query.limit
+            setorder(*tc_order(query)) if query.order.size > 0
           end
-
-          setlimit(query.limit.to_i) if query.limit
-          setorder(*tc_order(query)) if query.order.size > 0
         end
 
         def search
@@ -37,7 +35,11 @@ module DataMapper
         end
 
         protected
-          def tc_operator(operator, property, value)
+          def tc_field(query, operator, property, value)
+            property.field(query.repository.name)
+          end
+
+          def tc_operator(query, operator, property, value)
             # TODO: Not all operators are supported for all primitives, warn/error.
             # TODO: Range, Array support.
             # TODO: Negation?
@@ -54,14 +56,14 @@ module DataMapper
             end
           end
 
-          def tc_value(operator, property, value)
+          def tc_value(query, operator, property, value)
             value
           end
 
           def tc_order(query)
             warn "TokyoCabinet: Query only supports single order condition" if query.order.size > 1
-            order     = query.order.first
-            field     = order.property.field(query.repository.name)
+            order = query.order.first
+            field = order.property.field(query.repository.name)
 
             primitive = order.property.primitive
             direction = case order.direction

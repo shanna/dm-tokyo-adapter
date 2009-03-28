@@ -22,8 +22,11 @@ module DataMapper
                 accumulator
               end
 
-              # TODO: Composite keys.
-              connection.put(resource.id, store) || nil
+              values = resource.model.key(name).map{|property| property.get!(resource).to_s}
+              connection.put(
+                (values.size > 1 ? Digest::SHA1.hexdigest(values.join(':')) : values.first),
+                store
+              ) || nil
             end
           end.compact.size
         end
@@ -36,12 +39,13 @@ module DataMapper
               return records
             end
 
-            # TODO: Composite key support.
-            tc_query       = TokyoCabinet::Query.new(connection, query)
-            results        = tc_query.search
-            identity_field = query.model.key(name).detect{|p| p.serial?}
+            tc_query = TokyoCabinet::Query.new(connection, query)
+            results  = tc_query.search
+            keys     = query.model.key(name)
+
             results.each do |result|
-              connection.out(result[identity_field.field(name)]) || nil
+              values = keys.map{|key| result[key.field(name)]}
+              connection.out(values.size > 1 ? Digest::SHA1.hexdigest(values.join(':')) : values.first)
             end.compact.size
           end
         end
@@ -63,6 +67,7 @@ module DataMapper
               results  = tc_query.search
 
               results.each do |result|
+                next if result.nil?
                 values = query.model.properties.map do |property|
                   property.typecast(result[property.field(name)])
                 end
