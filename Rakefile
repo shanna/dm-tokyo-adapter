@@ -9,6 +9,7 @@ begin
     gem.email = "shane.hanna@gmail.com"
     gem.homepage = "http://github.com/shanna/dm-tokyo-cabinet-adapter"
     gem.authors = ["Shane Hanna"]
+    gem.files.reject!{|f| f =~ /\.tdb$/}
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
 rescue LoadError

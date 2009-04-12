@@ -8,7 +8,7 @@ module DataMapper
 
         def initialize(name, uri_or_options)
           super
-          @path = FileUtils.mkdir_p(@uri[:path] / @uri[:database])
+          @path = FileUtils.mkdir_p(@uri[:path] / @uri[:database]).first
         end
 
         def create(resources)
