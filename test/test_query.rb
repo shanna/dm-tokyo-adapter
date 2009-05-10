@@ -32,9 +32,14 @@ class QueryTest < Test::Unit::TestCase
       assert_equal 2, User.all(:name => 'John').size
     end
 
-    should 'get items with integer conditions' do
+    should 'get items with integer equality conditions' do
       User.create(:name => 'Fred', :age => 33)
       assert_equal 2, User.all(:age => 33).size
+    end
+
+    should 'get items with integer range conditions' do
+      User.create(:name => 'Fred', :age => 33)
+      assert_equal 3, User.all(:age.gte => 22, :age.lte => 34).size
     end
 
     should 'order items by string' do

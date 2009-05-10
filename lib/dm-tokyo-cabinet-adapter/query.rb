@@ -50,9 +50,9 @@ module DataMapper
               when :in   then QCSTRINC
               when :gt   then QCNUMGT
               when :lt   then QCNUMLT
-              when :gte  then QCNUMGTE
-              when :lte  then QCNUMLTE
-              else raise NotImplementedError.new("TokyoCabinet: Query does not suppor the #{operator} operator")
+              when :gte  then QCNUMGE
+              when :lte  then QCNUMLE
+              else raise NotImplementedError.new("TokyoCabinet: Query does not support the #{operator} operator")
             end
           end
 
