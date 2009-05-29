@@ -14,11 +14,7 @@ class AdapterTest < Test::Unit::TestCase
     end
 
     teardown do
-      # Why doesn't DM::Resource#destroy exist?
-      repository = DataMapper.repository(:default)
-      repository.adapter.delete(
-        DataMapper::Query.new(repository, ::User, {})
-      )
+      User.all.destroy
     end
 
     should 'assign id to attributes' do
@@ -59,11 +55,7 @@ class AdapterTest < Test::Unit::TestCase
     end
 
     teardown do
-      # Why doesn't DM::Resource#destroy exist?
-      repository = DataMapper.repository(:default)
-      repository.adapter.delete(
-        DataMapper::Query.new(repository, ::User, {})
-      )
+      User.all.destroy
     end
 
     should 'get an item' do

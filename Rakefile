@@ -4,12 +4,13 @@ require 'rake'
 begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
-    gem.name = "dm-tokyo-cabinet-adapter"
-    gem.summary = %Q{TODO}
-    gem.email = "shane.hanna@gmail.com"
-    gem.homepage = "http://github.com/shanna/dm-tokyo-cabinet-adapter"
-    gem.authors = ["Shane Hanna"]
+    gem.name     = 'dm-tokyo-cabinet-adapter'
+    gem.summary  = %Q{TODO}
+    gem.email    = 'shane.hanna@gmail.com'
+    gem.homepage = 'http://github.com/shanna/dm-tokyo-cabinet-adapter'
+    gem.authors  = ['Shane Hanna']
     gem.files.reject!{|f| f =~ /\.tdb$/}
+    gem.add_dependency 'dm-core', '~> 0.10.0'
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
 rescue LoadError

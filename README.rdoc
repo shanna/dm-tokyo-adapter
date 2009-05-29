@@ -17,8 +17,8 @@ delete properties.
 == Dependencies
 
 Ruby::
-* dm-core      ~> 0.9
-* tokyocabinet ~> 1.21
+* dm-core     ~> 0.10.0
+* rufus-tokyo ~> 0.1.12
 
 == Install
 
@@ -57,8 +57,8 @@ Ruby::
 == TODO
 
 * Documentation. It's undocumented at the moment.
-* Give access to the <tt>TokyoCabinet::TDB</tt> object through the adapter. Handy if you want to add indexes and other
-  things that can't be done through the DataMapper API.
+* Give access to the <tt>Rufus::Tokyo::Table</tt> object through the adapter. Handy if you want to add indexes and
+  other things that can't be done through the DataMapper API.
 * Better tests. I haven't really tested all the DM primitives and query operators yet.
 * Better typecasting. DataTime and Time should typecast to Integer so that they can be searched using the numeric
   operators.
@@ -69,7 +69,7 @@ centric API.
 
 That said ideally in the future I'd like to contribute to these broader goals:
 
-* All the TokyoCabinet table stores equally supported in DM.
+* All the TokyoCabinet stores equally supported in DM.
 * DataMapper define a public/semipublic API for key => value and search stores through Moneta (memcachedb, memcacheq,
   couchdb, mtokyo cabinet bdb, etc.)
 * DataMapper per adapter query operators. You can't always shoehorn everything into an SQL mindset.

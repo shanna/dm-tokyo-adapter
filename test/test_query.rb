@@ -16,11 +16,7 @@ class QueryTest < Test::Unit::TestCase
     end
 
     teardown do
-      # Why doesn't DM::Model#destroy exist?
-      repository = DataMapper.repository(:default)
-      repository.adapter.delete(
-        DataMapper::Query.new(repository, ::User, {})
-      )
+      User.all.destroy
     end
 
     should 'get items' do
