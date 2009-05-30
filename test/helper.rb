@@ -3,7 +3,7 @@ require 'test/unit'
 require 'shoulda'
 
 $:.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
-require 'dm-tokyo-cabinet-adapter'
+require 'dm-tokyo-adapter'
 
 class Test::Unit::TestCase
 end
