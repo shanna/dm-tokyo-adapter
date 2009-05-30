@@ -1,6 +1,6 @@
-= DataMapper Tokyo Cabinet Adapter
+= DataMapper Tokyo Cabinet/Tyrant Table Store Adapter
 
-* http://github.com/shanna/dm-tokyo-cabinet-adapter/tree/master
+* http://github.com/shanna/dm-tokyo-adapter/tree/master
 
 == Description
 
@@ -24,11 +24,11 @@ Ruby::
 
 * Via gem:
 
-    gem install shanna-dm-tokyo-cabinet-adapter -s http://gems.github.com
+    gem install shanna-dm-tokyo-adapter -s http://gems.github.com
 
 * Via git:
 
-    git clone git://github.com/shanna/dm-tokyo-cabinet-adapter.git
+    git clone git://github.com/shanna/dm-tokyo-adapter.git
     rake install
 
 == Synopsis

@@ -4,10 +4,10 @@ require 'rake'
 begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
-    gem.name     = 'dm-tokyo-cabinet-adapter'
+    gem.name     = 'dm-tokyo-adapter'
     gem.summary  = %Q{TODO}
     gem.email    = 'shane.hanna@gmail.com'
-    gem.homepage = 'http://github.com/shanna/dm-tokyo-cabinet-adapter'
+    gem.homepage = 'http://github.com/shanna/dm-tokyo-adapter'
     gem.authors  = ['Shane Hanna']
     gem.files.reject!{|f| f =~ /\.tdb$/}
     gem.add_dependency 'dm-core', '~> 0.10.0'
