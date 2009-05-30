@@ -17,13 +17,17 @@ module DataMapper
         end.size
       end
 
+      #--
+      # TODO: Check for nested conditions and unsupported operators. Use dm's matching, sorting and limiting in this
+      # case after the native match.
+      # TODO: Use native sorting if there is only a single order condition.
+      # TODO: connection[] if I have everything I need to fetch by the primary key.
       def read(query)
         with_connection(query.model) do |connection|
-          # TODO: connection[] if I have everything I need to fetch by the primary key.
           records = connection.query do |q|
             q.no_pk
             q.limit(query.limit) if query.limit
-            query.conditions.operands.each do |op|
+            query.conditions.each do |op|
               property = op.property
               slug     = op.class.slug
               slug     = :numeq if op.kind_of?(Conditions::EqualToComparison) && property.primitive == Integer
@@ -40,7 +44,7 @@ module DataMapper
           end
 
           # TC only supports a single order field.
-          query.sort_records(records).dup
+          query.sort_records(records)
         end
       end
 
@@ -99,7 +103,8 @@ module DataMapper
     class TokyoTyrantAdapter < TokyoCabinetAdapter
       protected
         def create_connection(model)
-          Rufus::Tokyo::TyrantTable.new(@options[:host], @options[:port])
+          credentials = [@options[:socket] || @options.values_at(:host, :port)]
+          Rufus::Tokyo::TyrantTable.new(*credentials.flatten)
         end
     end # TokyoTyrantAdapter
   end # Adapters
