@@ -6,7 +6,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Shane Hanna"]
-  s.date = %q{2009-05-30}
+  s.date = %q{2009-05-31}
   s.email = %q{shane.hanna@gmail.com}
   s.extra_rdoc_files = [
     "LICENSE",
@@ -18,9 +18,13 @@ Gem::Specification.new do |s|
     "Rakefile",
     "VERSION.yml",
     "lib/dm-tokyo-adapter.rb",
+    "lib/dm-tokyo-adapter/cabinet.rb",
+    "lib/dm-tokyo-adapter/query.rb",
+    "lib/dm-tokyo-adapter/tyrant.rb",
     "test/helper.rb",
-    "test/test_adapter.rb",
-    "test/test_query.rb"
+    "test/test_cabinet.rb",
+    "test/test_query.rb",
+    "test/test_tyrant.rb"
   ]
   s.homepage = %q{http://github.com/shanna/dm-tokyo-adapter}
   s.rdoc_options = ["--charset=UTF-8"]
@@ -29,8 +33,9 @@ Gem::Specification.new do |s|
   s.summary = %q{TODO}
   s.test_files = [
     "test/helper.rb",
-    "test/test_adapter.rb",
-    "test/test_query.rb"
+    "test/test_cabinet.rb",
+    "test/test_query.rb",
+    "test/test_tyrant.rb"
   ]
 
   if s.respond_to? :specification_version then
