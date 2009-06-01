@@ -5,8 +5,12 @@ module DataMapper
   module Adapters
     module Tokyo
 
-      #--
-      # TODO: Documentation.
+      # Query a Tokyo Cabinet table store with a DataMapper query.
+      #
+      # == Notes
+      #
+      # Query conditions not supported natively by TC's table query will fall back to DM's in-memory query
+      # filtering. This may impact performance.
       class Query
         include Extlib::Assertions
         include DataMapper::Query::Conditions
@@ -18,8 +22,7 @@ module DataMapper
         end
 
         #--
-        # TODO: Check for nested conditions and unsupported operators. Use dm's matching, sorting and limiting in this
-        # case after the native match.
+        # TODO: Log when a query cannot be performed natively by TC.
         # TODO: Use native sorting if there is only a single order condition.
         # TODO: connection[] if I have everything I need to fetch by the primary key.
         def read
@@ -35,7 +38,7 @@ module DataMapper
             statements.no_pk
             if @native
               statements.limit(@query.limit) if @query.limit
-              # TODO: Native order when only one order field.
+              # TODO: Native sorting when only one order field.
             end
           end
 

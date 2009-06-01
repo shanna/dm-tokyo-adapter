@@ -4,7 +4,7 @@
 
 == Description
 
-A DataMapper Tokyo Cabinet table store adapter.
+A DataMapper Tokyo Cabinet/Tyrant table store adapter.
 
 === Table Store
 
@@ -40,6 +40,13 @@ Ruby::
     :path     => File.dirname(__FILE__)
   )
 
+  # Tokyo Tyrant connection.
+  DataMapper.setup(:default,
+    :adapter  => 'tokyo_tyrant',
+    :host     => 'localhost',
+    :port     => '1978',
+  )
+
   # Define your DataMapper resource and start saving:
   class User
     include DataMapper::Resource
@@ -63,11 +70,7 @@ Ruby::
 * Better typecasting. DataTime and Time should typecast to Integer so that they can be searched using the numeric
   operators.
 
-Yes I realize there is already another dm-tokyo-cabinet-adapter on github. I chose to occupy the most obvious name also
-as this table store is arguably better suited than the existing b-tree adapter to DataMappers relational database
-centric API.
-
-That said ideally in the future I'd like to contribute to these broader goals:
+Ideally in the future I'd like to contribute to these broader goals:
 
 * All the TokyoCabinet stores equally supported in DM.
 * DataMapper define a public/semipublic API for key => value and search stores through Moneta (memcachedb, memcacheq,

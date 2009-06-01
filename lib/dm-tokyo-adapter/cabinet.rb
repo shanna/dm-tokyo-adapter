@@ -6,8 +6,17 @@ module DataMapper
   module Adapters
     module Tokyo
 
-      #--
-      # TODO: Documentation.
+      # A DataMapper Tokyo Cabinet table store adapter.
+      #
+      # http://tokyocabinet.sourceforge.net/spex-en.html#features_tctdb
+      #
+      # The Tokyo Cabinet table storage engine doesn't require a predefined schema and as such properties in your
+      # resource are only used by the adapter for typecasting. There is no need to migrate your resource when you
+      # create, update or delete properties.
+      #
+      # == See
+      #
+      # DataMapper::Adapters::Tokyo::Query:: Table Query.
       class CabinetAdapter < AbstractAdapter
         def create(resources)
           resources.map do |resource|
