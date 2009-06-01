@@ -87,10 +87,9 @@ module DataMapper
               when LessThanComparison             then :lt
               when GreaterThanOrEqualToComparison then :gte
               when LessThanOrEqualToComparison    then :lte
-              else @native = false
             end
 
-            return unless operator
+            return @native = false unless operator
             statements.add(comparison.property.field, operator, quote_value(value), affirmative)
           end
 
