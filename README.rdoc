@@ -44,7 +44,7 @@ Ruby::
   DataMapper.setup(:default,
     :adapter  => 'tokyo_tyrant',
     :host     => 'localhost',
-    :port     => '1978',
+    :port     => '1978'
   )
 
   # Define your DataMapper resource and start saving:
