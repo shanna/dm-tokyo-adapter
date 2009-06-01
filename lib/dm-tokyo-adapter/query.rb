@@ -9,6 +9,7 @@ module DataMapper
       # TODO: Documentation.
       class Query
         include Extlib::Assertions
+        include DataMapper::Query::Conditions
 
         def initialize(connection, query)
           assert_kind_of 'connection', connection, Rufus::Tokyo::Table
@@ -25,7 +26,7 @@ module DataMapper
           records = @connection.query do |statements|
             @query.conditions.each do |condition|
               condition_statement(statements, condition)
-              if @query.conditions.kind_of?(Conditions::OrOperation)
+              if @query.conditions.kind_of?(OrOperation)
                 @native = false
                 break
               end
@@ -52,16 +53,16 @@ module DataMapper
         private
           def condition_statement(statements, conditions, affirmative = true)
             case conditions
-              when Conditions::AbstractOperation  then operation_statement(statements, conditions, affrimative)
-              when Conditions::AbstractComparison then comparison_statement(statements, conditions, affirmative)
+              when AbstractOperation  then operation_statement(statements, conditions, affrimative)
+              when AbstractComparison then comparison_statement(statements, conditions, affirmative)
             end
           end
 
           def operation_statement(statements, operation, affirmative = true)
             case operation
-              when Conditions::OrOperation  then @native = false
-              when Conditions::NotOperation then condition_statement(statements, operation.first, !affirmative)
-              when Conditions::AndOperation then operation.each{|op| condition_statement(statements, op, affirmative)}
+              when OrOperation  then @native = false
+              when NotOperation then condition_statement(statements, operation.first, !affirmative)
+              when AndOperation then operation.each{|op| condition_statement(statements, op, affirmative)}
             end
           end
 
@@ -70,22 +71,22 @@ module DataMapper
             primitive = comparison.property.primitive
 
             if value.kind_of?(Range) && value.exclude_end?
-              operation = Conditions::BooleanOperation.new(:and,
-                Conditions::Comparison.new(:gte, comparison.property, value.first),
-                Conditions::Comparison.new(:lt, comparison.property, value.last)
+              operation = BooleanOperation.new(:and,
+                Comparison.new(:gte, comparison.property, value.first),
+                Comparison.new(:lt, comparison.property, value.last)
               )
               return operation_statement(statements, operation, affirmative)
             end
 
             operator = case comparison
-              when Conditions::EqualToComparison              then primitive == Integer ? :numeq : :eq
-              when Conditions::InclusionComparison            then primitive == Integer ? :numoreq : nil
-              when Conditions::RegexpComparison               then :regex
-              when Conditions::LikeComparison                 then :regex
-              when Conditions::GreaterThanComparison          then :gt
-              when Conditions::LessThanComparison             then :lt
-              when Conditions::GreaterThanOrEqualToComparison then :gte
-              when Conditions::LessThanOrEqualToComparison    then :lte
+              when EqualToComparison              then primitive == Integer ? :numeq : :eq
+              when InclusionComparison            then primitive == Integer ? :numoreq : nil
+              when RegexpComparison               then :regex
+              when LikeComparison                 then :regex
+              when GreaterThanComparison          then :gt
+              when LessThanComparison             then :lt
+              when GreaterThanOrEqualToComparison then :gte
+              when LessThanOrEqualToComparison    then :lte
               else @native = false
             end
 
