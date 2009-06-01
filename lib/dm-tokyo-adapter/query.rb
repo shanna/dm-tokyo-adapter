@@ -24,11 +24,11 @@ module DataMapper
         # TODO: connection[] if I have everything I need to fetch by the primary key.
         def read
           records = @connection.query do |statements|
-            @query.conditions.each do |condition|
-              condition_statement(statements, condition)
-              if @query.conditions.kind_of?(OrOperation)
-                @native = false
-                break
+            if @query.conditions.kind_of?(OrOperation)
+              @native = false
+            else
+              @query.conditions.each do |condition|
+                condition_statement(statements, condition)
               end
             end
 
@@ -75,7 +75,8 @@ module DataMapper
                 Comparison.new(:gte, comparison.property, value.first),
                 Comparison.new(:lt, comparison.property, value.last)
               )
-              return operation_statement(statements, operation, affirmative)
+              operation_statement(statements, operation, affirmative)
+              return
             end
 
             operator = case comparison
@@ -89,7 +90,10 @@ module DataMapper
               when LessThanOrEqualToComparison    then :lte
             end
 
-            return @native = false unless operator
+            unless operator
+              @native = false
+              return
+            end
             statements.add(comparison.property.field, operator, quote_value(value), affirmative)
           end
 
