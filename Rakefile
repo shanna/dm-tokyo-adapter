@@ -5,7 +5,7 @@ begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
     gem.name     = 'dm-tokyo-adapter'
-    gem.summary  = %Q{TODO}
+    gem.summary  = %Q{Tokyo Cabinet/Tyrant Table DataMapper Adapter.}
     gem.email    = 'shane.hanna@gmail.com'
     gem.homepage = 'http://github.com/shanna/dm-tokyo-adapter'
     gem.authors  = ['Shane Hanna']
