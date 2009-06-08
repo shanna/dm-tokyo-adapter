@@ -8,6 +8,7 @@ require 'dm-tokyo-adapter'
 class Test::Unit::TestCase
 end
 
+DataMapper::Logger.new(STDOUT, :debug) if $VERBOSE
 DataMapper.setup(:default, {
   :adapter  => 'tokyo_cabinet',
   :database => 'tc',
