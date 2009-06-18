@@ -78,7 +78,7 @@ module DataMapper
 
           def comparison_statement(statements, comparison, affirmative = true)
             value     = comparison.value
-            primitive = comparison.property.primitive
+            primitive = comparison.subject.primitive
 
             if value.kind_of?(Range) && value.exclude_end?
               operation = BooleanOperation.new(:and,
@@ -101,7 +101,7 @@ module DataMapper
               else fail_native("Comparison #{comparison.slug}'.") && return
             end
 
-            statements.add(comparison.property.field, operator, quote_value(value), affirmative)
+            statements.add(comparison.subject.field, operator, quote_value(value), affirmative)
           end
 
           def quote_value(value)
