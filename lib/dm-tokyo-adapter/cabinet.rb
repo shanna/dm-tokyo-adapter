@@ -21,7 +21,6 @@ module DataMapper
         def create(resources)
           resources.map do |resource|
             model          = resource.model
-            identity_field = model.identity_field
 
             with_connection(resource.model) do |connection|
               initialize_serial(resource, connection.generate_unique_id)
