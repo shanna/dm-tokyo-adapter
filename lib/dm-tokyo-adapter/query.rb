@@ -1,5 +1,5 @@
 require 'dm-core'
-require 'rufus-tokyo'
+require 'rufus/tokyo'
 
 module DataMapper
   module Adapters

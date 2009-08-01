@@ -1,6 +1,6 @@
 require 'dm-core'
 require 'fileutils'
-require 'rufus-tokyo'
+require 'rufus/tokyo'
 
 module DataMapper
   module Adapters
@@ -24,7 +24,7 @@ module DataMapper
             identity_field = model.identity_field
 
             with_connection(resource.model) do |connection|
-              initialize_identity_field(resource, connection.generate_unique_id) if identity_field
+              initialize_serial(resource, connection.generate_unique_id)
               connection[key(resource)] = attributes(resource, :field)
             end
           end.size
