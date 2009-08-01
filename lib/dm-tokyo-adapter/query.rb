@@ -77,8 +77,20 @@ module DataMapper
           end
 
           def comparison_statement(statements, comparison, affirmative = true)
-            value     = comparison.value
-            primitive = comparison.subject.primitive
+            value     = comparison.value.kind_of?(DataMapper::Resource) ? comparison.value[comparison.value.class.serial.name] : comparison.value
+
+            if(comparison.subject.is_a?( DataMapper::Associations::ManyToOne::Relationship))
+              statements.add( comparison.subject.child_key.first.name, :numeq, quote_value(value), affirmative)
+              return
+            end
+            if( comparison.subject.is_a?( DataMapper::Associations::OneToMany::Relationship) )
+              value = comparison.value[comparison.subject.child_key.first.name]
+
+              statements.add( comparison.subject.target_key.first.name, :numeq, quote_value(value), affirmative)
+              return
+            end
+
+            primitive =  comparison.subject.primitive
 
             if value.kind_of?(Range) && value.exclude_end?
               operation = BooleanOperation.new(:and,
